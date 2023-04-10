@@ -1,0 +1,17 @@
+.app {
+  &__title {
+    color: tomato;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    padding: 0 45%;
+
+    &-form {
+      margin-bottom: 10px;
+    }
+  }
+}
