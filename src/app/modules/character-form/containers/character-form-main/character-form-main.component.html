@@ -1,1 +1,16 @@
-<h1>Character-form-main</h1>
+<h1 class="character-form-main__title">Formulario de personajes</h1>
+
+<div class="character-form-main__wrapper">
+  <form [formGroup]="form" class="character-form-main__form">
+    <label>Nombre</label>
+    <input type="text" formControlName="name" />
+    <label>Planeta</label>
+    <input type="text" formControlName="planet" />
+    <label>¿Está vivo?</label>
+    <input type="checkbox" formControlName="isAlive" />
+  </form>
+
+  <button (click)="onSubmit()" type="submit" [disabled]="!form.valid">
+    Submit
+  </button>
+</div>

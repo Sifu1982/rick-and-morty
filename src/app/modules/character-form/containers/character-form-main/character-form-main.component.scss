@@ -1,0 +1,19 @@
+.character-form-main {
+  &__title {
+    display: flex;
+    justify-content: center;
+    color: purple;
+  }
+
+  &__wrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+}

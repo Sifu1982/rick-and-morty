@@ -3,12 +3,14 @@
     color: tomato;
     display: flex;
     justify-content: center;
+    margin-bottom: 32px;
   }
 
   &__buttons {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    padding: 0 45%;
+    margin-bottom: 32px;
 
     &-form {
       margin-bottom: 10px;
