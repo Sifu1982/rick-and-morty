@@ -1,0 +1,37 @@
+<ng-container *ngIf="characters">
+  <div class="character-main__buttons">
+    <button
+      *ngIf="showNextButton"
+      (click)="nextPage()"
+      class="character-main__buttons-button"
+    >
+      Next page
+    </button>
+    <button
+      *ngIf="showPreviousButton"
+      (click)="previousPage()"
+      class="character-main__buttons-button"
+    >
+      Previous page
+    </button>
+  </div>
+  <span class="character-main__page"
+    >You are at page:
+    <strong class="character-main__page-number">{{ page }}</strong>
+  </span>
+
+  <div class="character-main__cards">
+    <div
+      *ngFor="let character of characters"
+      (click)="getCharacterDetail()"
+      class="character-main__cards-card"
+    >
+      <img
+        [src]="character.image"
+        [alt]="character.name"
+        class="character-main__cards-card-img"
+      />
+      <span class="character-main__cards-card-title">{{ character.name }}</span>
+    </div>
+  </div>
+</ng-container>

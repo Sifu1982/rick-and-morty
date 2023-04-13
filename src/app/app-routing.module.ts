@@ -11,6 +11,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'characters',
+    loadChildren: () =>
+      import('./modules/characters/characters.module').then(
+        (m) => m.CharactersModule
+      ),
+  },
+  {
     path: '404',
     component: ErrorComponent,
   },

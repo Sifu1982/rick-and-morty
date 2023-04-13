@@ -16,6 +16,8 @@ export class CharacterFormMainComponent implements OnInit {
   public valueChanges: any;
 
   ngOnInit(): void {
+    console.log('Formulario');
+
     this.form.valueChanges.subscribe(
       (formValue) => (this.valueChanges = formValue)
     );
