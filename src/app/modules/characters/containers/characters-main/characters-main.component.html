@@ -21,17 +21,11 @@
   </span>
 
   <div class="character-main__cards">
-    <div
+    <character-card
       *ngFor="let character of characters"
-      (click)="getCharacterDetail()"
+      [character]="character"
+      (showDetail)="getCharacterDetail($event)"
       class="character-main__cards-card"
-    >
-      <img
-        [src]="character.image"
-        [alt]="character.name"
-        class="character-main__cards-card-img"
-      />
-      <span class="character-main__cards-card-title">{{ character.name }}</span>
-    </div>
+    ></character-card>
   </div>
 </ng-container>

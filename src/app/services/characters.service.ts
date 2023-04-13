@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Character, Characters } from './interfaces';
+import { Character, CharactersResponse } from './interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,13 @@ export class CharactersService {
 
   constructor(private http: HttpClient) {}
 
-  getCharactersByPage(page: number): Observable<Characters> {
-    return this.http.get<Characters>(`${this.baseUrl}/character/?page=${page}`);
+  getCharactersByPage(page: number): Observable<CharactersResponse> {
+    return this.http.get<CharactersResponse>(
+      `${this.baseUrl}/character/?page=${page}`
+    );
+  }
+
+  getCharacterById(id: number): Observable<Character> {
+    return this.http.get<Character>(`${this.baseUrl}/character/${id}`);
   }
 }

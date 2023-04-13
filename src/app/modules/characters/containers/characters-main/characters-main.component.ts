@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Character, CharactersService } from 'src/app/services';
 
 @Component({
@@ -15,7 +16,10 @@ export class CharactersMainComponent implements OnInit {
   private maximumNumberOfPages = 42;
   private minimumNumberOfPages = 1;
 
-  constructor(private charactersService: CharactersService) {}
+  constructor(
+    private charactersService: CharactersService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getCharacters();
@@ -35,8 +39,10 @@ export class CharactersMainComponent implements OnInit {
     }
   }
 
-  public getCharacterDetail(): void {
-    console.log('touched');
+  public getCharacterDetail(characterId: number): void {
+    this.router.navigate(['characters', 'detail'], {
+      state: { characterId: characterId },
+    });
   }
 
   private changePage(): void {

@@ -1,0 +1,8 @@
+<div (click)="getCharacterDetail(character.id)" class="character-card">
+  <img
+    [src]="character.image"
+    [alt]="character.name"
+    class="character-card-img"
+  />
+  <span class="character-card-title">{{ character.name }}</span>
+</div>
