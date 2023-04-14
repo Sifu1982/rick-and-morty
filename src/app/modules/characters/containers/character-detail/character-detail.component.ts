@@ -35,7 +35,7 @@ export class CharacterDetailComponent implements OnInit {
     created: new Date(),
   };
 
-  private characterId!: number;
+  private characterId = 0;
 
   constructor(
     private charactersService: CharactersService,
@@ -46,6 +46,14 @@ export class CharacterDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCharacterDetail();
+  }
+
+  public setEpisodeNumber(episode: string): string {
+    return episode.split('episode/')[1];
+  }
+
+  public navigateToCharacters(): void {
+    this.router.navigate(['characters']);
   }
 
   private getCharacterDetail(): void {

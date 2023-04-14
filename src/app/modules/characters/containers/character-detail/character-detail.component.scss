@@ -1,35 +1,25 @@
-.character-main {
-  &__buttons {
-    display: flex;
-    justify-content: space-evenly;
-    margin-bottom: 32px;
-
-    &-button {
-      background-color: lightblue;
-      border-color: lightseagreen;
-      border-radius: 3px;
-      color: lightcoral;
-      cursor: pointer;
-      padding: 10px;
-    }
-  }
-
-  &__page {
+.character-detail {
+  &__wrapper {
     align-items: center;
     display: flex;
-    justify-content: center;
-    margin-bottom: 16px;
-    &-number {
-      color: lightcoral;
-      display: flex;
-      font-size: xx-large;
-      margin-left: 8px;
-    }
+    flex-direction: column;
   }
 
-  &__cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+  &__title {
+    color: lightcoral;
+  }
+
+  &__back-button {
+    margin-bottom: 16px;
+  }
+
+  &__list {
+    color: black;
+    list-style: none;
+    padding: 0;
+
+    &-episodes {
+      max-width: 300px;
+    }
   }
 }
