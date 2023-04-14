@@ -1,31 +1,38 @@
-<ng-container *ngIf="characters">
-  <div class="character-main__buttons">
-    <button
-      *ngIf="showNextButton"
-      (click)="nextPage()"
-      class="character-main__buttons-button"
-    >
-      Next page
-    </button>
-    <button
-      *ngIf="showPreviousButton"
-      (click)="previousPage()"
-      class="character-main__buttons-button"
-    >
-      Previous page
-    </button>
-  </div>
-  <span class="character-main__page"
-    >You are at page:
-    <strong class="character-main__page-number">{{ page }}</strong>
-  </span>
+<div class="character-main__buttons">
+  <button
+    *ngIf="showNextButton"
+    (click)="nextPage()"
+    class="character-main__buttons-button"
+  >
+    Next page
+  </button>
+  <button
+    *ngIf="showPreviousButton"
+    (click)="previousPage()"
+    class="character-main__buttons-button"
+  >
+    Previous page
+  </button>
+  <form [formGroup]="form">
+    <input-number
+      [min]="minPagesNumb"
+      [max]="maxPagesNumb"
+      [placeholder]="placeholder"
+      formControlName="pageNumber"
+      (keydown)="goToPage()"
+    ></input-number>
+  </form>
+</div>
+<span class="character-main__page"
+  >You are at page:
+  <strong class="character-main__page-number">{{ currentPage }}</strong>
+</span>
 
-  <div class="character-main__cards">
-    <character-card
-      *ngFor="let character of characters"
-      [character]="character"
-      (showDetail)="getCharacterDetail($event)"
-      class="character-main__cards-card"
-    ></character-card>
-  </div>
-</ng-container>
+<div class="character-main__cards">
+  <character-card
+    *ngFor="let character of characters"
+    [character]="character"
+    (showDetail)="getCharacterDetail($event)"
+    class="character-main__cards-card"
+  ></character-card>
+</div>

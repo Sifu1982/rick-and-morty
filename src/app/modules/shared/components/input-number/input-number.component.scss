@@ -1,0 +1,13 @@
+.input-number {
+  background-color: lightblue;
+  border-color: lightseagreen;
+  border-radius: 3px;
+  color: lightcoral;
+  cursor: pointer;
+  padding: 10px;
+  width: 92px;
+
+  &::placeholder {
+    color: lightseagreen;
+  }
+}
