@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, forwardRef } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  Input,
+  OnInit,
+  TemplateRef,
+  forwardRef,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -24,6 +31,8 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
   @Input() max: number;
   @Input() placeholder: string;
   @Input() required = false;
+  @ContentChild('minMaxError') minMaxErrorTemplate!: TemplateRef<unknown>;
+  @ContentChild('requiredError') requiredErrorTemplate!: TemplateRef<unknown>;
 
   public form!: FormGroup;
   public disabled = false;
@@ -34,7 +43,7 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
 
   constructor() {
     this.min = 1;
-    this.max = 42;
+    this.max = 2;
     this.placeholder = '';
   }
 
@@ -48,9 +57,11 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
       value: new FormControl(this.min, validators),
     });
 
-    this.form.controls['value'].valueChanges.subscribe((value: number) =>
-      this.valueChange(value)
-    );
+    this.form.controls['value'].valueChanges.subscribe((value: number) => {
+      if (!this.form.controls['value'].errors) {
+        this.valueChange(value);
+      }
+    });
   }
 
   private valueChange(value: number): void {

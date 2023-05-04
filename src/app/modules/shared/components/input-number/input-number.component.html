@@ -2,10 +2,33 @@
   <input
     formControlName="value"
     type="number"
-    max="42"
-    min="1"
+    [max]="max"
+    [min]="min"
     [placeholder]="placeholder"
     [disabled]="disabled"
     class="input-number"
   />
 </form>
+
+<ng-container
+  [ngTemplateOutlet]="minMaxErrorTemplate || minMaxError"
+  *ngIf="
+    form.get('value')?.touched &&
+    (form.get('value')?.hasError('min') || form.get('value')?.hasError('max'))
+  "
+>
+</ng-container>
+
+<ng-container
+  [ngTemplateOutlet]="requiredError"
+  *ngIf="form.get('value')?.touched && form.get('value')?.hasError('required')"
+>
+</ng-container>
+
+<ng-template #minMaxError>
+  <span>* Indica un valor entre {{ min }} y {{ max }}</span>
+</ng-template>
+
+<ng-template #requiredError>
+  <span class="text-danger">* Indica un valor</span>
+</ng-template>

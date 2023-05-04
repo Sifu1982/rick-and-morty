@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { Character, CharactersService } from 'src/app/services';
 
@@ -12,12 +17,15 @@ export class CharactersMainComponent implements OnInit {
   public characters: Character[] = [];
   public currentPage = Number(localStorage.getItem('currentPage')) || 1;
   public form!: FormGroup;
-  //TODO: revisar para que este 42 no esté puesto a fuego y venfa de la API
+  //TODO: revisar para que este 42 no esté puesto a fuego y venga de la API
   public maxPagesNumb = 42;
   public minPagesNumb = 1;
-  public placeholder = 'Go to page...';
+  public placeholder =
+    `Page ${localStorage.getItem('currentPage')}` || 'Go to page...';
   public showNextButton = true;
   public showPreviousButton = true;
+
+  private getCurrentPageFromLocalStorage = localStorage.getItem('currentPage');
 
   constructor(
     private charactersService: CharactersService,
@@ -25,14 +33,17 @@ export class CharactersMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getCharacters();
     this.setForm();
+    this.formSubscription();
+    this.getCharacters();
+    console.log(this.maxPagesNumb);
   }
 
   public nextPage(): void {
     if (this.currentPage < this.maxPagesNumb) {
       this.currentPage++;
       this.changePage();
+      this.form.controls['pageNumber'].setValue(this.currentPage);
     }
   }
 
@@ -40,6 +51,7 @@ export class CharactersMainComponent implements OnInit {
     if (this.currentPage > this.minPagesNumb) {
       this.currentPage--;
       this.changePage();
+      this.form.controls['pageNumber'].setValue(this.currentPage);
     }
   }
 
@@ -49,17 +61,34 @@ export class CharactersMainComponent implements OnInit {
     });
   }
 
-  public goToPage(): void {
+  private formSubscription(): void {
     this.form.valueChanges.subscribe((formValue: { pageNumber: number }) => {
       this.currentPage = formValue.pageNumber;
-      this.changePage();
+      if (this.currentPage) {
+        this.changePage();
+      }
     });
   }
 
   private setForm(): void {
     this.form = new FormGroup({
-      pageNumber: new FormControl(),
+      pageNumber: new FormControl(
+        this.getCurrentPageFromLocalStorage,
+        this.minMaxValidator(this.minPagesNumb, this.maxPagesNumb)
+      ),
     });
+  }
+
+  private minMaxValidator(min: number, max: number): ValidatorFn {
+    return (control: AbstractControl) => {
+      if (control.value > max || control.value < min) {
+        return {
+          min: true,
+          max: true,
+        };
+      }
+      return null;
+    };
   }
 
   private changePage(): void {
@@ -76,9 +105,9 @@ export class CharactersMainComponent implements OnInit {
   private getCharacters(): void {
     this.charactersService
       .getCharactersByPage(this.currentPage)
-      .subscribe((response) => {
-        this.characters = response.results;
-        this.maxPagesNumb = response.info.pages;
+      .subscribe((charactersResponse) => {
+        this.characters = charactersResponse.results;
+        this.maxPagesNumb = charactersResponse.info.pages;
       });
   }
 }
