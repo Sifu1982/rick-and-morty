@@ -1,3 +1,8 @@
+<characters-filter
+  (filterResult)="handleFilter($event)"
+  (filterReseted)="resetFilter()"
+></characters-filter>
+
 <div class="character-main__buttons">
   <button
     *ngIf="showNextButton"

@@ -3,7 +3,10 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Sharedmodule } from '../shared';
 import { CharactersRoutingModule } from './characters-routing.module';
-import { CharactersCharacterCard } from './components';
+import {
+  CharactersCharacterCard,
+  CharactersFilterComponent,
+} from './components';
 import {
   CharacterDetailComponent,
   CharactersMainComponent,
@@ -14,6 +17,7 @@ import {
     CharactersMainComponent,
     CharactersCharacterCard,
     CharacterDetailComponent,
+    CharactersFilterComponent,
   ],
   imports: [
     CommonModule,

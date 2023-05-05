@@ -1,0 +1,58 @@
+<div class="characters-filter">
+  <h2 class="characters-filter__title">Character filter</h2>
+
+  <form [formGroup]="form" class="characters-filter__form">
+    <label>Name<input type="text" formControlName="name" /></label>
+    <label>Status</label>
+    <label>
+      <input type="radio" value="alive" formControlName="status" />Alive</label
+    >
+
+    <label>
+      <input type="radio" value="dead" formControlName="status" />Dead</label
+    >
+
+    <label>
+      <input
+        type="radio"
+        value="unknown"
+        formControlName="status"
+      />Unknown</label
+    >
+
+    <label>Species<input type="text" formControlName="species" /></label>
+
+    <label>Type<input type="text" formControlName="type" /></label>
+
+    <label>Gender</label>
+    <label>
+      <input
+        type="radio"
+        value="female"
+        formControlName="gender"
+      />Female</label
+    >
+
+    <label>
+      <input type="radio" value="male" formControlName="gender" />Male</label
+    >
+
+    <label>
+      <input
+        type="radio"
+        value="genderless"
+        formControlName="gender"
+      />Genderless</label
+    >
+
+    <label>
+      <input
+        type="radio"
+        value="unknown"
+        formControlName="gender"
+      />Unknown</label
+    >
+  </form>
+
+  <button (click)="resetFilter()">Reset filters</button>
+</div>

@@ -6,7 +6,11 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Character, CharactersService } from 'src/app/services';
+import {
+  Character,
+  CharactersFiltered,
+  CharactersService,
+} from 'src/app/services';
 
 @Component({
   selector: 'characters-main',
@@ -36,7 +40,6 @@ export class CharactersMainComponent implements OnInit {
     this.setForm();
     this.formSubscription();
     this.getCharacters();
-    console.log(this.maxPagesNumb);
   }
 
   public nextPage(): void {
@@ -59,6 +62,21 @@ export class CharactersMainComponent implements OnInit {
     this.router.navigate(['characters', 'detail'], {
       state: { characterId: characterId },
     });
+  }
+
+  public handleFilter(filter: CharactersFiltered): void {
+    console.log('Manejo el filtero', filter);
+    this.charactersService
+      .getFilteredCharacters(filter)
+      .subscribe((charactersFiltered) => {
+        console.log(charactersFiltered);
+        this.characters = charactersFiltered.results;
+      });
+  }
+
+  public resetFilter(): void {
+    this.currentPage = this.form.controls['pageNumber'].value;
+    this.changePage();
   }
 
   private formSubscription(): void {
