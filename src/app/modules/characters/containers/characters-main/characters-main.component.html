@@ -6,13 +6,6 @@
   >
     Next page
   </button>
-  <button
-    *ngIf="showPreviousButton"
-    (click)="previousPage()"
-    class="character-main__buttons-button"
-  >
-    Previous page
-  </button>
   <form [formGroup]="form">
     <input-number
       [min]="minPagesNumb"
@@ -22,6 +15,13 @@
       formControlName="pageNumber"
     ></input-number>
   </form>
+  <button
+    *ngIf="showPreviousButton"
+    (click)="previousPage()"
+    class="character-main__buttons-button"
+  >
+    Previous page
+  </button>
 </div>
 <span class="character-main__page"
   >You are at page:
