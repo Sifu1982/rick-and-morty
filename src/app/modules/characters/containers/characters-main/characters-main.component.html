@@ -1,4 +1,6 @@
 <characters-filter
+  [charactersFilteredNumber]="charactersFilteredNumber"
+  [showFilteredNumber]="showFilteredNumber"
   (filterResult)="handleFilter($event)"
   (filterReseted)="resetFilter()"
 ></characters-filter>
@@ -28,16 +30,19 @@
     Previous page
   </button>
 </div>
-<span class="character-main__page"
+
+<span *ngIf="showPagenumber" class="character-main__page"
   >You are at page:
   <strong class="character-main__page-number">{{ currentPage }}</strong>
 </span>
 
-<div class="character-main__cards">
-  <character-card
-    *ngFor="let character of characters"
-    [character]="character"
-    (showDetail)="getCharacterDetail($event)"
-    class="character-main__cards-card"
-  ></character-card>
-</div>
+<ng-container *ngIf="showCards; else error">
+  <div class="character-main__cards">
+    <character-card
+      *ngFor="let character of characters"
+      [character]="character"
+      (showDetail)="getCharacterDetail($event)"
+      class="character-main__cards-card"
+    ></character-card></div
+></ng-container>
+<ng-template #error> {{ errorText }} </ng-template>

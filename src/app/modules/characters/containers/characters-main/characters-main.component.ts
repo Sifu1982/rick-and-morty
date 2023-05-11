@@ -6,8 +6,10 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { debounceTime } from 'rxjs';
 import {
   Character,
+  CharactersErrorResponse,
   CharactersFiltered,
   CharactersService,
 } from 'src/app/services';
@@ -19,14 +21,19 @@ import {
 })
 export class CharactersMainComponent implements OnInit {
   public characters: Character[] = [];
+  public charactersFilteredNumber = 0;
   public currentPage = Number(localStorage.getItem('currentPage')) || 1;
+  public errorText = '';
   public form!: FormGroup;
   //TODO: revisar para que este 42 no esté puesto a fuego y venga de la API
   public maxPagesNumb = 42;
   public minPagesNumb = 1;
   public placeholder =
     `Page ${localStorage.getItem('currentPage')}` || 'Go to page...';
+  public showCards = true;
+  public showFilteredNumber = true;
   public showNextButton = true;
+  public showPagenumber = true;
   public showPreviousButton = true;
 
   private getCurrentPageFromLocalStorage = localStorage.getItem('currentPage');
@@ -40,6 +47,7 @@ export class CharactersMainComponent implements OnInit {
     this.setForm();
     this.formSubscription();
     this.getCharacters();
+    this.changePage();
   }
 
   public nextPage(): void {
@@ -65,27 +73,40 @@ export class CharactersMainComponent implements OnInit {
   }
 
   public handleFilter(filter: CharactersFiltered): void {
-    console.log('Manejo el filtero', filter);
+    this.showPagenumber = false;
+    this.showFilteredNumber = true;
+    this.showCards = true;
     this.charactersService
       .getFilteredCharacters(filter)
-      .subscribe((charactersFiltered) => {
-        console.log(charactersFiltered);
-        this.characters = charactersFiltered.results;
+      .pipe(debounceTime(500))
+      .subscribe({
+        next: (charactersFiltered) => {
+          this.charactersFilteredNumber = charactersFiltered.info.count;
+          this.characters = charactersFiltered.results;
+        },
+        error: (error: CharactersErrorResponse) => {
+          this.errorText = error.error.error;
+          this.showCards = false;
+          this.showFilteredNumber = false;
+        },
       });
   }
 
   public resetFilter(): void {
+    this.showPagenumber = true;
     this.currentPage = this.form.controls['pageNumber'].value;
-    this.changePage();
+    console.log(this.charactersFilteredNumber);
   }
 
   private formSubscription(): void {
-    this.form.valueChanges.subscribe((formValue: { pageNumber: number }) => {
-      this.currentPage = formValue.pageNumber;
-      if (this.currentPage) {
-        this.changePage();
-      }
-    });
+    this.form.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe((formValue: { pageNumber: number }) => {
+        this.currentPage = formValue.pageNumber;
+        if (this.currentPage) {
+          this.changePage();
+        }
+      });
   }
 
   private setForm(): void {

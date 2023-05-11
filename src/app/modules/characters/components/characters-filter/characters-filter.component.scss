@@ -9,8 +9,52 @@
 
   &__form {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-bottom: 16px;
     padding: 0 16px;
+
+    &--column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &--label {
+      display: flex;
+      justify-content: space-between;
+
+      &-name {
+        margin-bottom: 16px;
+      }
+
+      &-gender {
+        margin-bottom: 16px;
+      }
+    }
+
+    &--input {
+      margin-left: 16px;
+      max-width: 68px;
+    }
+
+    &--species {
+      justify-content: space-between;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+
+    &--text {
+      align-items: center;
+      display: flex;
+      font-weight: bolder;
+    }
+
+    &--number {
+      color: lightcoral;
+      font-size: xx-large;
+      padding: 0 8px;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   CharacterGender,
@@ -14,10 +14,15 @@ import {
 export class CharactersFilterComponent implements OnInit {
   public form!: FormGroup;
 
+  @Input() charactersFilteredNumber = 0;
+  @Input() showFilteredNumber = false;
+
   @Output() filterResult = new EventEmitter<CharactersFiltered>();
   @Output() filterReseted = new EventEmitter<boolean>();
 
   ngOnInit(): void {
+    // console.log(this.charactersFilteredNumber);
+
     this.setForm();
   }
 
