@@ -94,8 +94,9 @@ export class CharactersMainComponent implements OnInit {
 
   public resetFilter(): void {
     this.showPagenumber = true;
+    this.showFilteredNumber = false;
     this.currentPage = this.form.controls['pageNumber'].value;
-    console.log(this.charactersFilteredNumber);
+    this.changePage();
   }
 
   private formSubscription(): void {

@@ -95,7 +95,11 @@
       </ng-container>
     </ng-container>
     <ng-template #getNoCharacters>
-      <span class="characters-filter__footer--text">You get no characters</span>
+      <ng-container *ngIf="someCharacters">
+        <span class="characters-filter__footer--text"
+          >You get no characters</span
+        >
+      </ng-container>
     </ng-template>
   </div>
 </div>

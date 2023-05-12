@@ -13,6 +13,7 @@ import {
 })
 export class CharactersFilterComponent implements OnInit {
   public form!: FormGroup;
+  public someCharacters = false;
 
   @Input() charactersFilteredNumber = 0;
   @Input() showFilteredNumber = false;
@@ -21,9 +22,8 @@ export class CharactersFilterComponent implements OnInit {
   @Output() filterReseted = new EventEmitter<boolean>();
 
   ngOnInit(): void {
-    // console.log(this.charactersFilteredNumber);
-
     this.setForm();
+    this.setNoCharacters();
   }
 
   public resetFilter(): void {
@@ -50,5 +50,9 @@ export class CharactersFilterComponent implements OnInit {
     this.form.valueChanges.subscribe((form) => {
       this.filterResult.emit(form);
     });
+  }
+
+  private setNoCharacters(): void {
+    this.someCharacters = this.charactersFilteredNumber !== 0;
   }
 }
