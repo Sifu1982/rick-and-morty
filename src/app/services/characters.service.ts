@@ -31,7 +31,7 @@ export class CharactersService {
     filteredCharacter: CharactersFiltered
   ): Observable<CharactersResponse> {
     return this.http.get<CharactersResponse>(
-      `${this.baseUrlCharacter}/?name=${filteredCharacter.name}&status=${filteredCharacter.status}&species=${filteredCharacter.species}&type=${filteredCharacter.type}&gender=${filteredCharacter.gender}`
+      `${this.baseUrlCharacter}/?name=${filteredCharacter.name}&status=${filteredCharacter.status}&species=${filteredCharacter.species}&type=${filteredCharacter.type}&gender=${filteredCharacter.gender}&page=${filteredCharacter.page}`
     );
   }
 }

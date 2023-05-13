@@ -6,4 +6,5 @@ export interface CharactersFiltered {
   species?: string;
   type?: string;
   gender?: CharacterGender | '';
+  page?: number;
 }
