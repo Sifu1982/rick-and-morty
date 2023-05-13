@@ -5,36 +5,16 @@
   (filterReseted)="resetFilter()"
 ></characters-filter>
 
-<div class="character-main__buttons">
-  <button
-    *ngIf="showNextButton"
-    (click)="nextPage()"
-    class="character-main__buttons-button"
-  >
-    Next page
-  </button>
-  <form [formGroup]="form">
-    <input-number
-      [min]="minPagesNumb"
-      [max]="maxPagesNumb"
-      [required]="true"
-      [placeholder]="placeholder"
-      formControlName="pageNumber"
-    ></input-number>
-  </form>
-  <button
-    *ngIf="showPreviousButton"
-    (click)="previousPage()"
-    class="character-main__buttons-button"
-  >
-    Previous page
-  </button>
-</div>
-
-<span *ngIf="showPagenumber" class="character-main__page"
-  >You are at page:
-  <strong class="character-main__page-number">{{ currentPage }}</strong>
-</span>
+<characters-pages-handler
+  [currentPage]="currentPage"
+  [minPagesNumb]="minPagesNumb"
+  [maxPagesNumb]="maxPagesNumb"
+  [placeholder]="placeholder"
+  [showNextButton]="showNextButton"
+  [showPageNumber]="showPageNumber"
+  [showPreviousButton]="showPreviousButton"
+  (changePageNumber)="changePageNumber($event)"
+></characters-pages-handler>
 
 <ng-container *ngIf="showCards; else error">
   <div class="character-main__cards">

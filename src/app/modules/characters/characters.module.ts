@@ -6,6 +6,7 @@ import { CharactersRoutingModule } from './characters-routing.module';
 import {
   CharactersCharacterCard,
   CharactersFilterComponent,
+  CharactersPagesHandler,
 } from './components';
 import {
   CharacterDetailComponent,
@@ -14,15 +15,16 @@ import {
 
 @NgModule({
   declarations: [
-    CharactersMainComponent,
     CharactersCharacterCard,
     CharacterDetailComponent,
     CharactersFilterComponent,
+    CharactersMainComponent,
+    CharactersPagesHandler,
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     CharactersRoutingModule,
+    ReactiveFormsModule,
     Sharedmodule,
   ],
 })

@@ -1,0 +1,32 @@
+<div class="character-pages-handler__buttons">
+  <button
+    *ngIf="showNextButton"
+    (click)="nextPage()"
+    class="character-pages-handler__buttons-button"
+  >
+    Next page
+  </button>
+  <form [formGroup]="form">
+    <input-number
+      [min]="minPagesNumb"
+      [max]="maxPagesNumb"
+      [required]="true"
+      [placeholder]="placeholder"
+      formControlName="pageNumber"
+    ></input-number>
+  </form>
+  <button
+    *ngIf="showPreviousButton"
+    (click)="previousPage()"
+    class="character-pages-handler__buttons-button"
+  >
+    Previous page
+  </button>
+</div>
+
+<span *ngIf="showPageNumber" class="character-pages-handler__page"
+  >You are at page:
+  <strong class="character-pages-handler__page-number">{{
+    currentPage
+  }}</strong>
+</span>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -6,7 +6,7 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { debounceTime } from 'rxjs';
+import { debounceTime, take } from 'rxjs';
 import {
   Character,
   CharactersErrorResponse,
@@ -24,8 +24,7 @@ export class CharactersMainComponent implements OnInit {
   public charactersFilteredNumber = 0;
   public currentPage = Number(localStorage.getItem('currentPage')) || 1;
   public errorText = '';
-  public form!: FormGroup;
-  //TODO: revisar para que este 42 no esté puesto a fuego y venga de la API
+  //TODO: revisar para que este 42 no esté puesto a fuego y venga de la API y revisar cuando no hay local storage: el input no funciona bien
   public maxPagesNumb = 42;
   public minPagesNumb = 1;
   public placeholder =
@@ -33,10 +32,8 @@ export class CharactersMainComponent implements OnInit {
   public showCards = true;
   public showFilteredNumber = true;
   public showNextButton = true;
-  public showPagenumber = true;
+  public showPageNumber = true;
   public showPreviousButton = true;
-
-  private getCurrentPageFromLocalStorage = localStorage.getItem('currentPage');
 
   constructor(
     private charactersService: CharactersService,
@@ -44,26 +41,7 @@ export class CharactersMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.setForm();
-    this.formSubscription();
     this.getCharacters();
-    this.changePage();
-  }
-
-  public nextPage(): void {
-    if (this.currentPage < this.maxPagesNumb) {
-      this.currentPage++;
-      this.changePage();
-      this.form.controls['pageNumber'].setValue(this.currentPage);
-    }
-  }
-
-  public previousPage(): void {
-    if (this.currentPage > this.minPagesNumb) {
-      this.currentPage--;
-      this.changePage();
-      this.form.controls['pageNumber'].setValue(this.currentPage);
-    }
   }
 
   public getCharacterDetail(characterId: number): void {
@@ -73,7 +51,7 @@ export class CharactersMainComponent implements OnInit {
   }
 
   public handleFilter(filter: CharactersFiltered): void {
-    this.showPagenumber = false;
+    this.showPageNumber = false;
     this.showFilteredNumber = true;
     this.showCards = true;
     this.charactersService
@@ -93,53 +71,17 @@ export class CharactersMainComponent implements OnInit {
   }
 
   public resetFilter(): void {
-    this.showPagenumber = true;
+    this.showPageNumber = true;
     this.showFilteredNumber = false;
-    this.currentPage = this.form.controls['pageNumber'].value;
-    this.changePage();
+    this.currentPage = Number(localStorage.getItem('currentPage'));
   }
 
-  private formSubscription(): void {
-    this.form.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe((formValue: { pageNumber: number }) => {
-        this.currentPage = formValue.pageNumber;
-        if (this.currentPage) {
-          this.changePage();
-        }
+  public changePageNumber(pageNumber: number) {
+    this.charactersService
+      .getCharactersByPage(pageNumber)
+      .subscribe((charactersResponse) => {
+        this.characters = charactersResponse.results;
       });
-  }
-
-  private setForm(): void {
-    this.form = new FormGroup({
-      pageNumber: new FormControl(
-        this.getCurrentPageFromLocalStorage,
-        this.minMaxValidator(this.minPagesNumb, this.maxPagesNumb)
-      ),
-    });
-  }
-
-  private minMaxValidator(min: number, max: number): ValidatorFn {
-    return (control: AbstractControl) => {
-      if (control.value > max || control.value < min) {
-        return {
-          min: true,
-          max: true,
-        };
-      }
-      return null;
-    };
-  }
-
-  private changePage(): void {
-    this.storageCurrentPage();
-    this.getCharacters();
-    this.showNextButton = this.currentPage < this.maxPagesNumb;
-    this.showPreviousButton = this.currentPage > this.minPagesNumb;
-  }
-
-  private storageCurrentPage(): void {
-    localStorage.setItem('currentPage', this.currentPage.toString());
   }
 
   private getCharacters(): void {
