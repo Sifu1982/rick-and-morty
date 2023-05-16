@@ -1,18 +1,25 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   ValidatorFn,
 } from '@angular/forms';
-import { debounceTime } from 'rxjs';
+import { Subscription, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'characters-pages-handler',
   templateUrl: 'characters-pages-handler.component.html',
   styleUrls: ['characters-pages-handler.component.scss'],
 })
-export class CharactersPagesHandler implements OnInit {
+export class CharactersPagesHandler implements OnInit, OnDestroy {
   @Input() currentPage = 0;
   @Input() minPagesNumb = 0;
   @Input() maxPagesNumb = 0;
@@ -28,29 +35,24 @@ export class CharactersPagesHandler implements OnInit {
 
   private getCurrentPageFromLocalStorage = localStorage.getItem('currentPage');
 
+  private formSubscription = new Subscription();
+
   ngOnInit(): void {
     this.setForm();
   }
 
-  public nextPage(): void {
-    if (this.currentPage < this.maxPagesNumb) {
-      this.currentPage++;
-      this.storageCurrentPage();
-      this.form.controls['pageNumber'].setValue(this.currentPage);
-      this.changePage();
-    }
+  ngOnDestroy(): void {
+    this.formSubscription.unsubscribe();
   }
 
-  public previousPage(): void {
-    if (this.currentPage > this.minPagesNumb) {
-      this.currentPage--;
-      this.storageCurrentPage();
-      this.form.controls['pageNumber'].setValue(this.currentPage);
-      this.changePage();
-    }
+  public changePage(page: number): void {
+    this.currentPage = this.currentPage + page;
+    this.storageCurrentPage();
+    this.form.controls['pageNumber'].setValue(this.currentPage);
+    this.emitPage();
   }
 
-  private changePage(): void {
+  private emitPage(): void {
     this.changePageNumber.emit(this.currentPage);
     this.showNextButton = this.currentPage < this.maxPagesNumb;
     this.showPreviousButton = this.currentPage > this.minPagesNumb;
@@ -59,18 +61,20 @@ export class CharactersPagesHandler implements OnInit {
   private setForm(): void {
     this.form = new FormGroup({
       pageNumber: new FormControl(
-        this.getCurrentPageFromLocalStorage,
+        this.getCurrentPageFromLocalStorage || 1,
         this.minMaxValidator(this.minPagesNumb, this.maxPagesNumb)
       ),
     });
 
-    this.form.valueChanges.pipe(debounceTime(500)).subscribe({
-      next: (formValue: Partial<{ pageNumber: number }>) => {
-        this.currentPage = formValue.pageNumber as number;
-        this.storageCurrentPage();
-        this.changePage();
-      },
-    });
+    this.formSubscription = this.form.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe({
+        next: (formValue: Partial<{ pageNumber: number }>) => {
+          this.currentPage = formValue.pageNumber as number;
+          this.storageCurrentPage();
+          this.emitPage();
+        },
+      });
   }
 
   private minMaxValidator(min: number, max: number): ValidatorFn {

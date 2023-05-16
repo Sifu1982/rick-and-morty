@@ -18,7 +18,6 @@ export class CharactersMainComponent implements OnInit, OnDestroy {
   public charactersFilteredNumber = 0;
   public currentPage = Number(localStorage.getItem('currentPage')) || 1;
   public errorText = '';
-  //TODO: revisar para que este 42 no esté puesto a fuego y venga de la API y revisar cuando no hay local storage: el input no funciona bien
   public maxPagesNumb = 42;
   public minPagesNumb = 1;
   public placeholder =
