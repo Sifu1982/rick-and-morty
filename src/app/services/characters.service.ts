@@ -17,6 +17,10 @@ export class CharactersService {
 
   constructor(private http: HttpClient) {}
 
+  getAllCharacters(): Observable<CharactersResponse> {
+    return this.http.get<CharactersResponse>(`${this.baseUrlCharacter}`);
+  }
+
   getCharactersByPage(page: number): Observable<CharactersResponse> {
     return this.http.get<CharactersResponse>(
       `${this.baseUrlCharacter}/?page=${page}`

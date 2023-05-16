@@ -1,10 +1,10 @@
 <div class="character-pages-handler__buttons">
   <button
-    *ngIf="showNextButton"
-    (click)="nextPage()"
+    *ngIf="showPreviousButton"
+    (click)="previousPage()"
     class="character-pages-handler__buttons-button"
   >
-    Next page
+    Previous page
   </button>
   <form [formGroup]="form">
     <input-number
@@ -15,12 +15,13 @@
       formControlName="pageNumber"
     ></input-number>
   </form>
+
   <button
-    *ngIf="showPreviousButton"
-    (click)="previousPage()"
+    *ngIf="showNextButton"
+    (click)="nextPage()"
     class="character-pages-handler__buttons-button"
   >
-    Previous page
+    Next page
   </button>
 </div>
 

@@ -5,21 +5,51 @@
     flex-direction: column;
   }
 
+  &__card {
+    align-items: center;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    padding: 0 16px;
+  }
+
   &__title {
     color: lightcoral;
   }
 
   &__back-button {
+    cursor: pointer;
     margin-bottom: 16px;
+  }
+
+  &__image {
+    width: 100%;
   }
 
   &__list {
     color: black;
     list-style: none;
+    margin-bottom: 48px;
     padding: 0;
 
     &-episodes {
       max-width: 300px;
+    }
+  }
+
+  &__buttons {
+    background-color: lightcoral;
+    border: 1px solid black;
+    border-bottom: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 16px;
+    width: 100%;
+
+    &--button {
+      cursor: pointer;
+      min-width: 60px;
     }
   }
 }

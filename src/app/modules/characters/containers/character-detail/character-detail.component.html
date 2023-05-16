@@ -1,27 +1,51 @@
 <div class="character-detail__wrapper">
-  <h2 class="character-detail__title">Detail</h2>
-  <button
-    (click)="navigateToCharacters()"
-    class="character-detail__back-button"
-  >
-    Back to Characters
-  </button>
+  <div class="character-detail__card">
+    <h2 class="character-detail__title">Detail</h2>
+    <button
+      (click)="navigateToCharactersMain()"
+      class="character-detail__back-button"
+    >
+      Back to Characters
+    </button>
 
-  <img *ngIf="character.image" [src]="character.image" [alt]="character.name" />
-  <ul class="character-detail__list">
-    <li>Name: {{ character.name }}</li>
-    <li>Status: {{ character.status }}</li>
-    <li>Specie: {{ character.species }}</li>
-    <li>Type {{ character.type }}</li>
-    <li>Gender: {{ character.gender }}</li>
-    <li>Origin name: {{ character.origin.name }}</li>
-    <li>Location: {{ character.location.name }}</li>
-    <li>Created at: {{ character.created | date }}</li>
-    <li class="character-detail__list-episodes">
-      Episodes where appears:
-      <span *ngFor="let episode of character.episode">
-        {{ setEpisodeNumber(episode) }},
-      </span>
-    </li>
-  </ul>
+    <img
+      *ngIf="character.image"
+      [src]="character.image"
+      [alt]="character.name"
+      class="character-detail__image"
+    />
+    <ul class="character-detail__list">
+      <li>Name: {{ character.name }}</li>
+      <li>Status: {{ character.status }}</li>
+      <li>Specie: {{ character.species }}</li>
+      <li>Type {{ character.type }}</li>
+      <li>Gender: {{ character.gender }}</li>
+      <li>Origin name: {{ character.origin.name }}</li>
+      <li>Location: {{ character.location.name }}</li>
+      <li>Created at: {{ character.created | date }}</li>
+      <li class="character-detail__list-episodes">
+        Episodes where appears:
+        <span *ngFor="let episode of character.episode">
+          {{ setEpisodeNumber(episode) }},
+        </span>
+      </li>
+    </ul>
+
+    <div class="character-detail__buttons">
+      <button
+        *ngIf="showPreviousButton"
+        (click)="changePageNumber(character.id - 1)"
+        class="character-detail__buttons--button"
+      >
+        Previous
+      </button>
+      <button
+        *ngIf="showNextButton"
+        (click)="changePageNumber(character.id + 1)"
+        class="character-detail__buttons--button"
+      >
+        Next
+      </button>
+    </div>
+  </div>
 </div>
