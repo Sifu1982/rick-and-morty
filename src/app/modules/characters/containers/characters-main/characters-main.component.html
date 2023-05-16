@@ -21,7 +21,7 @@
     <character-card
       *ngFor="let character of characters"
       [character]="character"
-      (showDetail)="getCharacterDetail($event)"
+      (showDetail)="goToCharacterDetail($event)"
       class="character-main__cards-card"
     ></character-card></div
 ></ng-container>

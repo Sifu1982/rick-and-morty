@@ -39,9 +39,9 @@ export class CharacterDetailComponent implements OnInit, OnDestroy {
   public showPreviousButton = true;
 
   private characterId = 1;
-  private getAllCharactersSubscription: Subscription = new Subscription();
-  private getCharacterDetailSubscription: Subscription = new Subscription();
-  private numberOfCaharacters = 0;
+  private getAllCharactersSubscription = new Subscription();
+  private getCharacterDetailSubscription = new Subscription();
+  private totalNumberOfCharacters = 0;
 
   constructor(
     private charactersService: CharactersService,
@@ -51,9 +51,10 @@ export class CharacterDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.setInitialShowPreviousButton();
     this.setNumberOfCharacters();
-    this.getCharacterDetail(this.characterId);
+    this.getCharacterDetail(
+      Number(localStorage.getItem('currentCharacterId')) || this.characterId
+    );
   }
 
   ngOnDestroy(): void {
@@ -69,32 +70,23 @@ export class CharacterDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['characters']);
   }
 
-  public changePageNumber(pageNumber: number) {
+  public changeCharacter(pageNumber: number) {
     this.showPreviousButton = true;
     this.showNextButton = true;
-    if (pageNumber <= 1) {
-      this.showPreviousButton = false;
-    }
+    localStorage.setItem(
+      'currentCharacterId',
+      (this.character.id + pageNumber).toString()
+    );
 
-    if (pageNumber >= this.numberOfCaharacters) {
-      this.showNextButton = false;
-    }
-    this.getCharacterDetail(pageNumber);
-  }
-
-  private setInitialShowPreviousButton(): void {
-    if (this.character.id === 0) {
-      this.showPreviousButton = false;
-    }
+    this.getCharacterDetail(this.character.id + pageNumber);
   }
 
   private setNumberOfCharacters(): void {
     this.getAllCharactersSubscription = this.charactersService
       .getAllCharacters()
       .subscribe({
-        next: (characters) => {
-          this.numberOfCaharacters = characters.info.count;
-        },
+        next: (characters) =>
+          (this.totalNumberOfCharacters = characters.info.count),
       });
   }
 
@@ -102,8 +94,18 @@ export class CharacterDetailComponent implements OnInit, OnDestroy {
     this.charactersService.getCharacterById(characterId).subscribe({
       next: (character) => {
         this.character = character;
+        this.setShowPreviousNextButton();
       },
     });
+  }
+
+  private setShowPreviousNextButton(): void {
+    if (this.character.id === 1) {
+      this.showPreviousButton = false;
+    }
+    if (this.character.id === this.totalNumberOfCharacters) {
+      this.showNextButton = false;
+    }
   }
 
   private getCharacterId(): void {

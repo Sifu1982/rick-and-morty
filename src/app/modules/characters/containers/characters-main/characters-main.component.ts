@@ -1,12 +1,6 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidatorFn,
-} from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { debounceTime, take } from 'rxjs';
+import { Subscription, debounceTime } from 'rxjs';
 import {
   Character,
   CharactersErrorResponse,
@@ -19,7 +13,7 @@ import {
   templateUrl: 'characters-main.component.html',
   styleUrls: ['characters-main.component.scss'],
 })
-export class CharactersMainComponent implements OnInit {
+export class CharactersMainComponent implements OnInit, OnDestroy {
   public characters: Character[] = [];
   public charactersFilteredNumber = 0;
   public currentPage = Number(localStorage.getItem('currentPage')) || 1;
@@ -35,16 +29,25 @@ export class CharactersMainComponent implements OnInit {
   public showPageNumber = true;
   public showPreviousButton = true;
 
+  private getCharactersByPageSubscription = new Subscription();
+  private getFilteredCharactersSubscription = new Subscription();
+
   constructor(
     private charactersService: CharactersService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.getCharacters();
+    this.changePageNumber(this.currentPage);
   }
 
-  public getCharacterDetail(characterId: number): void {
+  ngOnDestroy(): void {
+    this.getFilteredCharactersSubscription.unsubscribe();
+    this.getCharactersByPageSubscription.unsubscribe();
+  }
+
+  public goToCharacterDetail(characterId: number): void {
+    localStorage.setItem('currentCharacterId', characterId.toString());
     this.router.navigate(['characters', 'detail'], {
       state: { characterId: characterId },
     });
@@ -54,7 +57,7 @@ export class CharactersMainComponent implements OnInit {
     this.showPageNumber = false;
     this.showFilteredNumber = true;
     this.showCards = true;
-    this.charactersService
+    this.getFilteredCharactersSubscription = this.charactersService
       .getFilteredCharacters(filter)
       .pipe(debounceTime(500))
       .subscribe({
@@ -77,16 +80,8 @@ export class CharactersMainComponent implements OnInit {
   }
 
   public changePageNumber(pageNumber: number) {
-    this.charactersService
+    this.getCharactersByPageSubscription = this.charactersService
       .getCharactersByPage(pageNumber)
-      .subscribe((charactersResponse) => {
-        this.characters = charactersResponse.results;
-      });
-  }
-
-  private getCharacters(): void {
-    this.charactersService
-      .getCharactersByPage(this.currentPage)
       .subscribe((charactersResponse) => {
         this.characters = charactersResponse.results;
         this.maxPagesNumb = charactersResponse.info.pages;

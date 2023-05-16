@@ -8,6 +8,30 @@
       Back to Characters
     </button>
 
+    <div class="character-detail__buttons">
+      <button
+        *ngIf="showPreviousButton"
+        (click)="changeCharacter(-1)"
+        class="character-detail__buttons--button"
+      >
+        Previous
+      </button>
+      <button
+        *ngIf="showNextButton"
+        (click)="changeCharacter(1)"
+        class="character-detail__buttons--button"
+      >
+        Next
+      </button>
+    </div>
+
+    <p class="character-detail__number-info">
+      You are at character:
+      <strong class="character-detail__number-info--number">{{
+        character.id
+      }}</strong>
+    </p>
+
     <img
       *ngIf="character.image"
       [src]="character.image"
@@ -30,22 +54,5 @@
         </span>
       </li>
     </ul>
-
-    <div class="character-detail__buttons">
-      <button
-        *ngIf="showPreviousButton"
-        (click)="changePageNumber(character.id - 1)"
-        class="character-detail__buttons--button"
-      >
-        Previous
-      </button>
-      <button
-        *ngIf="showNextButton"
-        (click)="changePageNumber(character.id + 1)"
-        class="character-detail__buttons--button"
-      >
-        Next
-      </button>
-    </div>
   </div>
 </div>
