@@ -1,4 +1,12 @@
-<div (click)="getCharacterDetail(character.id)" class="character-card">
+<div
+  (click)="getCharacterDetail(character.id)"
+  class="character-card"
+  [ngClass]="{
+    'character-card__alive': isAlive,
+    'character-card__dead': isDead,
+    'character-card__unknown': isUnknown,
+  }"
+>
   <img
     [src]="character.image"
     [alt]="character.name"
@@ -6,9 +14,15 @@
   />
   <span class="character-card__title">{{ character.name }}</span>
   <div class="character-card__info">
-    <span>Status: {{ character.status }} </span>
+    <span
+      [ngClass]="{ 'character-card__info--isAliveSelected': statusGender.status.isAlive, 'character-card__info--isDeadSelected': statusGender.status.isDead, 'character-card__info--isUnknownStatusSelected': statusGender.status.isUnknown,}"
+      >Status: {{ character.status }}
+    </span>
     <span>Specie: {{ character.species }} </span>
     <span>Type: {{ character.type || "Not available" }} </span>
-    <span>Gender: {{ character.gender }} </span>
+    <span
+      [ngClass]="{ 'character-card__info--isFemaleSelected': statusGender.gender.isFemale, 'character-card__info--isMaleSelected': statusGender.gender.isMale, 'character-card__info--isGenderlessSelected': statusGender.gender.isGenderless, 'character-card__info--isUnknownGenderSelected': statusGender.gender.isUnknownSelected,}"
+      >Gender: {{ character.gender }}
+    </span>
   </div>
 </div>

@@ -4,12 +4,26 @@
   cursor: pointer;
   margin-bottom: 16px;
 
+  &__alive {
+    border: 2px solid lightgreen;
+    box-shadow: 10px 10px 5px lightgreen;
+  }
+
+  &__dead {
+    border: 2px solid lightcoral;
+    box-shadow: 4px 4px 5px lightcoral;
+  }
+
+  &__unknown {
+    border: 2px solid lightslategrey;
+    box-shadow: 4px 4px 5px lightslategrey;
+  }
+
   &__img {
-    padding: 10px;
+    padding: 12px 12px 0 12px;
   }
 
   &__title {
-    border-top: 1px solid;
     display: flex;
     font-size: larger;
     font-weight: bolder;
@@ -21,5 +35,41 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    padding-bottom: 12px;
+
+    &--isAliveSelected {
+      color: lightgreen;
+      font-size: x-large;
+    }
+
+    &--isDeadSelected {
+      color: lightcoral;
+      font-size: x-large;
+    }
+
+    &--isUnknownStatusSelected {
+      color: lightslategrey;
+      font-size: x-large;
+    }
+
+    &--isFemaleSelected {
+      color: lightpink;
+      font-size: x-large;
+    }
+
+    &--isMaleSelected {
+      color: lightblue;
+      font-size: x-large;
+    }
+
+    &--isGenderlessSelected {
+      color: lightyellow;
+      font-size: x-large;
+    }
+
+    &--isUnknownGenderSelected {
+      color: lightsteelblue;
+      font-size: x-large;
+    }
   }
 }

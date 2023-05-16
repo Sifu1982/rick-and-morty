@@ -1,13 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Character, Gender, Species, Status } from 'src/app/services';
+import { CharacterCardStatusGender } from '../interfaces';
 
 @Component({
   selector: 'character-card',
   templateUrl: 'characters-character-card.component.html',
   styleUrls: ['characters-character-card.component.scss'],
 })
-export class CharactersCharacterCard {
+export class CharactersCharacterCard implements OnInit {
+  public isAlive = false;
+  public isDead = false;
+  public isUnknown = false;
+
   @Input() character: Character;
+  @Input() statusGender: CharacterCardStatusGender;
+
   @Output() showDetail = new EventEmitter<number>();
 
   constructor() {
@@ -31,6 +38,25 @@ export class CharactersCharacterCard {
       url: 'string',
       created: new Date(),
     };
+
+    this.statusGender = {
+      status: {
+        isAlive: false,
+        isUnknown: false,
+        isDead: false,
+      },
+      gender: {
+        isFemale: false,
+        isMale: false,
+        isGenderless: false,
+        isUnknownSelected: false,
+      },
+    };
+  }
+  ngOnInit(): void {
+    this.isAlive = this.character.status === Status.Alive;
+    this.isDead = this.character.status === Status.Dead;
+    this.isUnknown = this.character.status === Status.Unknown;
   }
 
   public getCharacterDetail(characterId: number): void {

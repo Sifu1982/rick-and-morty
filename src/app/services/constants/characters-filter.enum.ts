@@ -1,12 +1,12 @@
 export enum CharacterStatus {
-  alive = 'alive',
-  dead = 'dead',
-  unknown = 'unknown',
+  Alive = 'alive',
+  Dead = 'dead',
+  Unknown = 'unknown',
 }
 
 export enum CharacterGender {
-  female = 'female',
-  male = 'male',
-  genderless = 'genderless',
-  unknown = 'unknown',
+  Female = 'female',
+  Male = 'male',
+  Genderless = 'genderless',
+  Unknown = 'unknown',
 }
