@@ -1,5 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Subscription, debounceTime } from 'rxjs';
 import {
   CharacterGender,
   CharacterStatus,
@@ -11,9 +19,8 @@ import {
   templateUrl: 'characters-filter.component.html',
   styleUrls: ['characters-filter.component.scss'],
 })
-export class CharactersFilterComponent implements OnInit {
+export class CharactersFilterComponent implements OnInit, OnDestroy {
   public form!: FormGroup;
-  public someCharacters = false;
 
   @Input() charactersFilteredNumber = 0;
   @Input() showFilteredNumber = false;
@@ -21,9 +28,14 @@ export class CharactersFilterComponent implements OnInit {
   @Output() filterResult = new EventEmitter<CharactersFiltered>();
   @Output() filterReseted = new EventEmitter<boolean>();
 
+  private formSubscription = new Subscription();
+
   ngOnInit(): void {
     this.setForm();
-    this.setNoCharacters();
+  }
+
+  ngOnDestroy(): void {
+    this.formSubscription.unsubscribe();
   }
 
   public resetFilter(): void {
@@ -47,12 +59,10 @@ export class CharactersFilterComponent implements OnInit {
       gender: new FormControl<CharacterGender | ''>(''),
     });
 
-    this.form.valueChanges.subscribe((form) => {
-      this.filterResult.emit(form);
-    });
-  }
-
-  private setNoCharacters(): void {
-    this.someCharacters = this.charactersFilteredNumber !== 0;
+    this.formSubscription = this.form.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe((form) => {
+        this.filterResult.emit(form);
+      });
   }
 }
